@@ -62,9 +62,10 @@ app.get("/.svg", async (c) => {
   const at = (data.duration.at ?? 0) + ((Date.now() - game.lastUpdated) * 1000);
 
 
-  if (at > data.duration.end) {
+  if (at > data.duration.end || game.lastUpdated + 1000 * 60 * 10 < Date.now()) {
     data = { duration: {} }; game.data = undefined;
   }
+
 
   const svg = await satori(
     <div
