@@ -1,15 +1,28 @@
-# music2
+# Music Embeds Spotify
 
-To install dependencies:
+This is sortof version 2 of https://github.com/Tricked-dev/musicembeds but instead it uses mpris to get the currently playing music making this solution only work on linux but with all music players instead you can change which music player to use in the server.tsx post file its currently hardcoded to spotify but you can change it to whatever.
+Also everything needed to configure it can be found in .env.example
 
-```bash
-bun install
+```ini
+PORT=4124
+SECRET=bwahaha
+PUBLIC_URL=http://localhost:4124
 ```
 
-To run:
+To run the client run
 
-```bash
-bun run index.ts
+```sh
+bun client.tsx
 ```
 
-This project was created using `bun init` in bun v1.0.4. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+to run the server run
+
+```sh
+bun i # the server requires some dependencies
+```
+
+```sh
+bun server.tsx
+```
+
+The sourcecode is pretty simple and small so anyone should be able to understand / read it so feel free to do so this code is licensed under MIT OR APACHE 2.0
