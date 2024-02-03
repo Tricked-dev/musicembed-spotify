@@ -43,7 +43,6 @@ app.get("/", (c) => {
 app.post("/", async (c) => {
   if (c.req.header("secret") !== process.env.SECRET) return c.status(401)
   const text = await (await c.req.text()).split("%")
-  console.log(text)
   game.lastUpdated = Date.now();
   game.data = {
     duration: {
@@ -54,7 +53,6 @@ app.post("/", async (c) => {
     artist: text[0],
     title: text[1],
   }
-  console.log(game.data)
   return c.text("", 200)
 })
 

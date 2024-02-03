@@ -6,8 +6,7 @@
   "type": "module",
   "main": "src/index.tsx",
   "scripts": {
-    "build": "NODE_ENV='prod' bun src/index.tsx",
-    "dev": "bun --watch src/index.tsx",
+    "dev": "bun --watch server.tsx",
     "fmt": "prettier --write ."
   },
   "keywords": [],
