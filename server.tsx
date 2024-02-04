@@ -9,9 +9,12 @@ const port = parseInt(
   process.env.PORT || "4124",
 );
 
+const host = process.env.HOSTNAME || process.env.HOST || "localhost";
+
 const app = new Hono({
   strict: false,
 });
+
 
 app.use('*', cors({
   origin: (c) => c,
@@ -93,8 +96,6 @@ app.get("/.svg", async (c) => {
         width={500}
         src={data.thumbnail ?? 'https://lh3.googleusercontent.com/U9DTgHAZAXCDbXbaAm5AycnEqTOdaNngi6RoN796rvmXlHCZQjC4NV5FWA9QPmfMzmHTvDrYyAMvNZ00=w1500-h844-l90-rj'}
       />
-
-
       <div
         style={{
           display: "flex",
@@ -171,4 +172,4 @@ app.get("/.svg", async (c) => {
 
 console.log(`Listening on port http://localhost:${port}`);
 
-export default { ...app, port };
+export default { ...app, port, hostname: host };
