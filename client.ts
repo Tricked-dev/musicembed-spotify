@@ -12,7 +12,7 @@ for (;;) {
   try {
     await new Promise((r) => setTimeout(r, interval));
     const text =
-      await Bun.$`playerctl metadata --format "{{artist}}%{{title}}%{{mpris:artUrl}}%{{mpris:length}}%{{position}}"`
+      await Bun.$`playerctl -p spotify metadata --format "{{artist}}%{{title}}%{{mpris:artUrl}}%{{mpris:length}}%{{position}}"`
         .text()
         .then((r) => r.trim().split("%"));
     if (text[1] == lastSong && it != resetLim) {
@@ -22,12 +22,23 @@ for (;;) {
       it = 0;
       lastSong = text[1];
     }
+
+    const obj = {
+      duration: {
+        at: (parseInt(text[4]) / 1000000) | 0,
+        end: (parseInt(text[3]) / 1000000) | 0,
+      },
+      thumbnail: text[2],
+      artist: text[0],
+      title: text[1],
+    };
+
     const s = await fetch(process.env.PUBLIC_URL as string, {
       method: "POST",
       headers: {
         secret: process.env.SECRET as string,
       },
-      body: text.join("%"),
+      body: JSON.stringify(obj),
     });
     if (debug) console.log("Done updating!", text, s.status, s.statusText);
     errored = false;

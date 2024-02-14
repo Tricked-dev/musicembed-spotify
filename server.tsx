@@ -41,34 +41,33 @@ app.get("/", (c) => {
   )
 })
 
-
-
 app.post("/", async (c) => {
-  if (c.req.header("secret") !== process.env.SECRET) return c.status(401)
-  const text = await (await c.req.text()).split("%")
-  game.lastUpdated = Date.now();
-  game.data = {
-    duration: {
-      end: parseInt(text[3]),
-      at: parseInt(text[4]),
-    },
-    thumbnail: text[2],
-    artist: text[0],
-    title: text[1],
+  const secret = process.env.SECRET;
+  if (secret != c.req.header("secret")) {
+    return c.json({ status: 401 }, 401)
   }
-  return c.text("", 200)
+
+  const body = await c.req.json();
+  game.lastUpdated = Date.now();
+
+  if (game.data?.videoId && (JSON.stringify(game.data?.videoId) === JSON.stringify(body.videoId) && JSON.stringify(game.data.duration) === JSON.stringify(body.duration))) {
+    game.data.paused = true;
+    return c.json({ status: 200 }, 200);
+  }
+
+  game.data = body;
+
+  return c.json({ status: 200 }, 200);
 })
 
 app.get("/.svg", async (c) => {
   let data = game.data ?? { duration: {} }
 
-  const at = (data.duration.at ?? 0) + ((Date.now() - game.lastUpdated) * 1000);
+  const at = (data.duration.at ?? 0) + ((Date.now() - game.lastUpdated) / 1000);
 
-
-  if (at > data.duration.end || game.lastUpdated + 1000 * 60 * 10 < Date.now()) {
+  if (at > data.duration.end) {
     data = { duration: {} }; game.data = undefined;
   }
-
 
   const svg = await satori(
     <div
