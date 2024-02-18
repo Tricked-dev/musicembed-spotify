@@ -1,0 +1,12 @@
+version: "3"
+services:
+  backend:
+    build:
+      context: https://github.com/Tricked-dev/musicembed-spotify.git#apps/server
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./database.sqlite3:/usr/src/app/database.sqlite3
+    ports:
+      - 4124:4124

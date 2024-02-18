@@ -28,11 +28,11 @@ RUN bun test
 # copy production dependencies and source code into final image
 FROM base AS release
 COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /usr/src/app/server.tsx .
+COPY --from=prerelease /usr/src/app/index.tsx .
 COPY --from=prerelease /usr/src/app/assets/Roboto-Regular.ttf assets/
 COPY --from=prerelease /usr/src/app/package.json .
 
 # run the app
 USER bun
 EXPOSE 4124/tcp
-ENTRYPOINT [ "bun", "run", "server.tsx" ]
+ENTRYPOINT [ "bun", "run", "index.tsx" ]
